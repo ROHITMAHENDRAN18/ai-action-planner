@@ -3,7 +3,7 @@ import json
 
 from dotenv import load_dotenv
 from groq import Groq
-
+from tools import calculate_time_budget
 load_dotenv()
 
 api_key = os.getenv("GROQ_API_KEY")
@@ -56,4 +56,10 @@ Return ONLY valid JSON in this format:
 
     content = response.choices[0].message.content
 
-    return json.loads(content)
+    plan = json.loads(content)
+
+    time_budget = calculate_time_budget(plan["tasks"])
+
+    plan["time_budget"] = time_budget
+
+    return plan
